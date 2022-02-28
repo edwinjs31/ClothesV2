@@ -2,8 +2,11 @@ package com.albares.clothes.db;
 
 import com.albares.clothes.utils.Db;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -20,6 +23,14 @@ public class Buy {
     public Buy() {
     }
 
+    public Buy(Integer id, Product product, Integer quantity, Date date) {
+        this.id = id;
+        this.product = product;
+        this.quantity = quantity;
+        this.date = date;
+    }
+
+    
     public Buy(Integer id, Product product, Customer customer, Integer quantity, Date date) {
         this.id = id;
         this.product = product;
@@ -27,7 +38,7 @@ public class Buy {
         this.quantity = quantity;
         this.date = date;
     }
-
+ 
     public Integer getId() {
         return id;
     }
@@ -72,7 +83,7 @@ public class Buy {
         this.setDate(new Date());
         long timeMilis = this.getDate().getTime();
         java.sql.Date sqlDate = new java.sql.Date(timeMilis);
-        
+
         PreparedStatement ps = myDb.prepareStatement(
                 "INSERT INTO buys(id_product,id_customer,quantity,date) VALUES(?,?,?,?);");
         ps.setInt(1, this.getProduct().getId());
@@ -81,4 +92,22 @@ public class Buy {
         ps.setDate(4, sqlDate);
         ps.executeUpdate();
     }
+    /*
+    public static List selectBuysCustomer_DB(Db myDb,int id) throws SQLException {
+        PreparedStatement ps = myDb.prepareStatement(
+            "SELECT b.id,p.name,b.quantity,b.date" +
+             "FROM products p,buys b,customers c" +
+             "WHERE c.id=b.id_customer AND p.id=b.id_product AND c.id=?;");
+        ps.setInt(1, id);
+        ResultSet rs = myDb.executeQuery(ps);
+        List<Buy> buysCustomer=new ArrayList();
+        while(rs.next()){
+            Product product=new Product();
+            product.setName(rs.getString(2));
+            
+            Buy buy=new Buy(rs.getInt(1), product, rs.getInt(3), rs.getDate(4));
+            buysCustomer.add(buy);
+        }
+        return buysCustomer;
+    }*/
 }

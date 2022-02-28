@@ -1,10 +1,11 @@
 package com.albares.clothes.api;
 
+import com.albares.clothes.db.Buy;
 import com.albares.clothes.db.Customer;
 import com.albares.clothes.db.Product;
 import com.albares.clothes.utils.*;
-import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.*;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
@@ -16,8 +17,8 @@ public class AdminService {
     /*
     REQUEST:
     {
-        "product":{}    //el admin puede dar de alta a cualquiera de los dos
-        "customer":{}
+        "product":{...}    //el admin puede dar de alta a cualquiera de los dos
+        "customer":{...}
     }
     RESPONSE:
     {
@@ -51,26 +52,36 @@ public class AdminService {
     /*
     REQUEST:
     {
-        http://localhost:8084/clothes/admin/products   //dos posibles opciones
-        http://localhost:8084/clothes/admin/customers  
+        http://localhost:8084/clothes/admin/products      //lista todos los productos.
+        http://localhost:8084/clothes/admin/customers     //lista todos los clientes.
+        http://localhost:8084/clothes/admin/customers?id=2   //id cliente,lista compras  
     }
     RESPONSE:
     {
         "responseCode": 1 //OK
                         0 //Error
     
-        products:{...}    ||en funcion al REQUEST devolverá una lista u otra.
+        products:{...}    ||en funcion al REQUEST devolverá una lista u otra(3 listas).
+    
         customers:{...}
+    
+        buys:{"id":4,
+              "product":{"nombre"},
+              "quantity":3,
+              "date":2022-02-28
+              }
+    
         
     }
      */
     @GET
     @Path("/{entity}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProducts(@PathParam("entity") String entity) throws SQLException {
+    public Response getProducts(@PathParam("entity") String entity, @QueryParam("id") int id) throws SQLException {
         Response r = new Response();
         Db myDb = new Db();
         myDb.connect();
+
         if (entity.equalsIgnoreCase("products")) {
             List<Product> products = Product.selectAllProducts_DB(myDb);
             myDb.disconnect();
@@ -78,6 +89,10 @@ public class AdminService {
             r.setProducts(products);
             return r;
         } else if (entity.equalsIgnoreCase("customers")) {
+            if (id != 0) {
+                r.setResponseCode(ResponseCode.NOT_EXIST);
+                return r;
+            }
             List<Customer> customers = Customer.selectAllCustomers_DB(myDb);
             myDb.disconnect();
             r.setResponseCode(ResponseCode.OK);
@@ -86,6 +101,7 @@ public class AdminService {
         } else {
             r.setResponseCode(ResponseCode.ERROR);
             return r;
+
         }
 
     }

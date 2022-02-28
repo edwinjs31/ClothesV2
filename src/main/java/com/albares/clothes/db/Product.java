@@ -26,6 +26,13 @@ public class Product {
 
     }
 
+    public Product(Integer id, String name, Integer price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+    
+
     public Product(Integer id, String name, Integer price, Integer stock, Integer gender) {
         this.id = id;
         this.name = name;
