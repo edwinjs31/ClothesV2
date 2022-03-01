@@ -1,6 +1,7 @@
 package com.albares.clothes.db;
 
 import com.albares.clothes.utils.Db;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.sql.*;
 import java.util.*;
 
@@ -8,6 +9,7 @@ import java.util.*;
  *
  * @author Edwin Jaldin S.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Customer {
 
     private Integer id;

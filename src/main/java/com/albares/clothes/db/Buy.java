@@ -1,6 +1,7 @@
 package com.albares.clothes.db;
 
 import com.albares.clothes.utils.Db;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ import java.util.List;
  *
  * @author Edwin Jaldin S.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Buy {
 
     private Integer id;
@@ -23,14 +25,13 @@ public class Buy {
     public Buy() {
     }
 
-    public Buy(Integer id, Product product, Integer quantity, Date date) {
+    public Buy(Integer id, Integer quantity, Date date, Product product) {
         this.id = id;
-        this.product = product;
         this.quantity = quantity;
         this.date = date;
+        this.product = product;
     }
 
-    
     public Buy(Integer id, Product product, Customer customer, Integer quantity, Date date) {
         this.id = id;
         this.product = product;
@@ -38,7 +39,7 @@ public class Buy {
         this.quantity = quantity;
         this.date = date;
     }
- 
+
     public Integer getId() {
         return id;
     }
@@ -92,22 +93,27 @@ public class Buy {
         ps.setDate(4, sqlDate);
         ps.executeUpdate();
     }
-    /*
+
     public static List selectBuysCustomer_DB(Db myDb,int id) throws SQLException {
         PreparedStatement ps = myDb.prepareStatement(
-            "SELECT b.id,p.name,b.quantity,b.date" +
-             "FROM products p,buys b,customers c" +
-             "WHERE c.id=b.id_customer AND p.id=b.id_product AND c.id=?;");
+                "SELECT b.id, b.quantity, b.date, p.name, p.price "
+                + "FROM buys AS b INNER JOIN products AS p "
+                + "ON p.id = b.id_product WHERE b.id_customer=?;");
+
         ps.setInt(1, id);
         ResultSet rs = myDb.executeQuery(ps);
-        List<Buy> buysCustomer=new ArrayList();
-        while(rs.next()){
-            Product product=new Product();
-            product.setName(rs.getString(2));
-            
-            Buy buy=new Buy(rs.getInt(1), product, rs.getInt(3), rs.getDate(4));
+        List<Buy> buysCustomer = new ArrayList();
+        while (rs.next()) {
+            //java.sql.Date dbSqlDate = rs.getDate(5);
+            //Date nDate = new Date(rs.getDate(5).getTime());
+            Buy buy = new Buy(
+                    rs.getInt(1),
+                    rs.getInt(2),
+                    rs.getDate(3),
+                    new Product(rs.getString(4), rs.getInt(5))
+            );
             buysCustomer.add(buy);
         }
         return buysCustomer;
-    }*/
+    }
 }
