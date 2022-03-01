@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,15 +22,18 @@ public class Buy {
     private Customer customer;
     private Integer quantity;
     private Date date;
+    
+    //fuera de BD, fecha legible solo para mostrar al usuario
+    private String purchaseDate;
 
     public Buy() {
     }
 
-    public Buy(Integer id, Integer quantity, Date date, Product product) {
+    public Buy(Integer id, Integer quantity, String purchaseDate, Product product) {
         this.id = id;
         this.quantity = quantity;
-        this.date = date;
         this.product = product;
+        this.purchaseDate = purchaseDate;
     }
 
     public Buy(Integer id, Product product, Customer customer, Integer quantity, Date date) {
@@ -80,6 +84,14 @@ public class Buy {
         this.date = date;
     }
 
+    public String getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(String purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
     public void insertBuy_DB(Db myDb) throws SQLException {
         this.setDate(new Date());
         long timeMilis = this.getDate().getTime();
@@ -94,7 +106,9 @@ public class Buy {
         ps.executeUpdate();
     }
 
-    public static List selectBuysCustomer_DB(Db myDb,int id) throws SQLException {
+    public static List selectBuysCustomer_DB(Db myDb, int id) throws SQLException {
+        String format = "dd-MM-yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         PreparedStatement ps = myDb.prepareStatement(
                 "SELECT b.id, b.quantity, b.date, p.name, p.price "
                 + "FROM buys AS b INNER JOIN products AS p "
@@ -104,12 +118,12 @@ public class Buy {
         ResultSet rs = myDb.executeQuery(ps);
         List<Buy> buysCustomer = new ArrayList();
         while (rs.next()) {
-            //java.sql.Date dbSqlDate = rs.getDate(5);
-            //Date nDate = new Date(rs.getDate(5).getTime());
+            Date newDate = new Date(rs.getDate(3).getTime());
+            String formatD = sdf.format(newDate);
             Buy buy = new Buy(
                     rs.getInt(1),
                     rs.getInt(2),
-                    rs.getDate(3),
+                    formatD,
                     new Product(rs.getString(4), rs.getInt(5))
             );
             buysCustomer.add(buy);
