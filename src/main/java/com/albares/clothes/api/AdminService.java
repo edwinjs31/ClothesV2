@@ -61,12 +61,12 @@ public class AdminService {
         "responseCode": 1 //OK
                         0 //Error
     
-        products:{...}    ||en funcion al REQUEST devolverá una lista u otra(3 listas).
+        products:{...}    ||en funcion al REQUEST devolverá una lista u otra(3 posibles listas).
     
         customers:{...}
     
         buys:{"id":4,
-              "product":{"nombre"},
+              "product":{"name":"Camiseta,"price":67},
               "quantity":3,
               "date":2022-02-28
               }
@@ -90,7 +90,10 @@ public class AdminService {
             return r;
         } else if (entity.equalsIgnoreCase("customers")) {
             if (id != 0) {
-                r.setResponseCode(ResponseCode.NOT_EXIST);
+                List<Buy> buys = Buy.selectBuysCustomer_DB(myDb,id);
+                myDb.disconnect();
+                r.setResponseCode(ResponseCode.OK);
+                r.setBuys(buys);
                 return r;
             }
             List<Customer> customers = Customer.selectAllCustomers_DB(myDb);
