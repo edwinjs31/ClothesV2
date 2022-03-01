@@ -29,7 +29,6 @@ public class UserService {
       "responseCode": 1 //OK
                      -1 //OUT_OF_STOCK
                       0 //Error
-                      
     }
      */
     @POST
@@ -66,6 +65,7 @@ public class UserService {
 
     }
 
+    
     /*
     REQUEST:
     {

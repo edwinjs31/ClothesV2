@@ -24,7 +24,6 @@ public class AdminService {
     {
         "responseCode": 1 //OK
                         0 //Error
-                       
     }
      */
     @POST
@@ -49,19 +48,21 @@ public class AdminService {
 
     }
 
+    
+    
     /*
     REQUEST:
     {
         http://localhost:8084/clothes/admin/products      //lista todos los productos.
         http://localhost:8084/clothes/admin/customers     //lista todos los clientes.
-        http://localhost:8084/clothes/admin/customers?id=2   //id cliente,lista compras  
+        http://localhost:8084/clothes/admin/customers?id=2   //id cliente(@QueryParm)lista compras  
     }
     RESPONSE:
     {
         "responseCode": 1 //OK
                         0 //Error
     
-        products:{...}    ||en funcion al REQUEST devolverá una lista u otra(3 posibles listas).
+        products:{...}    ||en funcion al REQUEST devolverá una lista u otra(3 posibles listas):
     
         customers:{...}
     
@@ -71,7 +72,6 @@ public class AdminService {
               "date":2022-02-28
               }
     
-        
     }
      */
     @GET
@@ -108,6 +108,8 @@ public class AdminService {
         }
 
     }
+    
+    
 
     /*
     REQUEST:
@@ -127,7 +129,6 @@ public class AdminService {
     {
         "responseCode": 1 //OK
                         0 //Error
-                       
     }
      */
     @PUT
