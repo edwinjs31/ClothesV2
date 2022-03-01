@@ -1,6 +1,5 @@
 package com.albares.clothes.utils;
 
-import com.albares.clothes.db.Buy;
 import com.albares.clothes.db.Customer;
 import com.albares.clothes.db.Product;
 
@@ -12,7 +11,6 @@ public class GenericData {
 
     private Product product;
     private Customer customer;
-    private Buy buy;
 
     public GenericData() {
     }
@@ -23,10 +21,6 @@ public class GenericData {
 
     public GenericData(Customer customer) {
         this.customer = customer;
-    }
-
-    public GenericData(Buy buy) {
-        this.buy = buy;
     }
 
     public Product getProduct() {
@@ -43,14 +37,6 @@ public class GenericData {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    public Buy getBuy() {
-        return buy;
-    }
-
-    public void setBuy(Buy buy) {
-        this.buy = buy;
     }
 
 }

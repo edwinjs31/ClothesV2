@@ -81,7 +81,7 @@ public class Product {
     }
 
 
-    //INSERT Product
+    
     public void insertProduct_DB(Db myDb) throws SQLException, NoSuchAlgorithmException {
         PreparedStatement ps = myDb.prepareStatement(
                 "INSERT INTO products (name, price, stock, gender) VALUES (?, ?, ?, ?);"
@@ -93,7 +93,7 @@ public class Product {
         ps.executeUpdate();
     }
 
-    //SELECT products
+   
     public static List selectAllProducts_DB(Db myDb) throws SQLException {
         PreparedStatement ps = myDb.prepareStatement(
                 "SELECT id,name,price,stock,gender FROM products;"
@@ -110,12 +110,6 @@ public class Product {
                     rs.getInt(3),
                     rs.getInt(4),
                     rs.getInt(5)
-            //otra forma 
-            /*rs.getInt("id"),
-                    rs.getString("name"),
-                    rs.getInt("price"),
-                    rs.getInt("stock"),
-                    rs.getInt("gender")*/
             );
             products.add(product);
         }
