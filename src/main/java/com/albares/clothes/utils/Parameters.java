@@ -11,8 +11,8 @@ public final class Parameters {
     public static final String PROJECT_NAME = "Clothes";
         
     
-    public static final String DB_URL = "jdbc:postgresql://localhost:5432/shop_db";
-    public static final String DB_USER = "shop_user";
+    public static final String DB_URL = "jdbc:postgresql://localhost:5432/clothes_db";
+    public static final String DB_USER = "clothes_user";
     public static final String DB_PASS = Secrets.DB_PASS;
     
 }

@@ -1,10 +1,10 @@
 -- sudo su postgres
--- createuser shop_user
--- createdb shop_db --owner shop_user
+-- createuser clothes_user
+-- createdb clothes_db --owner clothes_user
 -- psql
--- alter user shop_user with password '12345';
+-- alter user clothes_user with password '12345';
 -- \q
--- psql shop_db
+-- psql clothes_db
 
 
 --CLIENTES
@@ -16,10 +16,10 @@ CREATE TABLE customers (
 );
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-GRANT ALL ON SCHEMA public TO shop_user;
+GRANT ALL ON SCHEMA public TO clothes_user;
 
 REVOKE ALL ON customers FROM public;
-GRANT ALL ON customers TO shop_user;
+GRANT ALL ON customers TO clothes_user;
 
 --PROVEEDORES
 /*
@@ -46,10 +46,10 @@ CREATE TABLE products (
 "gender" integer
 );
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-GRANT ALL ON SCHEMA public TO shop_user;
+GRANT ALL ON SCHEMA public TO clothes_user;
 
 REVOKE ALL ON products FROM public;
-GRANT ALL ON products TO shop_user;
+GRANT ALL ON products TO clothes_user;
 
 
 --COMPRAS
@@ -71,10 +71,10 @@ CREATE TABLE buys (
 );
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-GRANT ALL ON SCHEMA public TO shop_user;
+GRANT ALL ON SCHEMA public TO clothes_user;
 
 REVOKE ALL ON buys FROM public;
-GRANT ALL ON buys TO shop_user;
+GRANT ALL ON buys TO clothes_user;
 
 
 --INSERT INTO products (name, price, stock, gender) VALUES ('pantalones', 2000, 6, 1);
