@@ -1,6 +1,6 @@
 package com.albares.clothes.utils;
 
-import com.albares.clothes.db.Buy;
+import com.albares.clothes.db.Purchase;
 import com.albares.clothes.db.Customer;
 import com.albares.clothes.db.Product;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,7 +12,7 @@ public class Response {
     private Integer responseCode;
     private List<Product> products;
     private List<Customer> customers;
-    private List<Buy> buys;
+    private List<Purchase> purchases;
     private GenericData genericData;
 
     public Response() {
@@ -59,12 +59,12 @@ public class Response {
         this.genericData = genericData;
     }
 
-    public List<Buy> getBuys() {
-        return buys;
+    public List<Purchase> getPurchases() {
+        return purchases;
     }
 
-    public void setBuys(List<Buy> buys) {
-        this.buys = buys;
+    public void setPurchases(List<Purchase> purchases) {
+        this.purchases = purchases;
     }
 
     

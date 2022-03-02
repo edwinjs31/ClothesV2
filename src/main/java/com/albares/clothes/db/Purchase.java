@@ -15,7 +15,7 @@ import java.util.List;
  * @author Edwin Jaldin S.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Buy {
+public class Purchase {
 
     private Integer id;
     private Product product;
@@ -26,17 +26,17 @@ public class Buy {
     //fuera de BD, fecha legible solo para mostrar al usuario
     private String purchaseDate;
 
-    public Buy() {
+    public Purchase() {
     }
 
-    public Buy(Integer id, Integer quantity, String purchaseDate, Product product) {
+    public Purchase(Integer id, Integer quantity, String purchaseDate, Product product) {
         this.id = id;
         this.quantity = quantity;
         this.product = product;
         this.purchaseDate = purchaseDate;
     }
 
-    public Buy(Integer id, Product product, Customer customer, Integer quantity, Date date) {
+    public Purchase(Integer id, Product product, Customer customer, Integer quantity, Date date) {
         this.id = id;
         this.product = product;
         this.customer = customer;
@@ -116,11 +116,11 @@ public class Buy {
 
         ps.setInt(1, id);
         ResultSet rs = myDb.executeQuery(ps);
-        List<Buy> buysCustomer = new ArrayList();
+        List<Purchase> buysCustomer = new ArrayList();
         while (rs.next()) {
             Date newDate = new Date(rs.getDate(3).getTime());
             String formatD = sdf.format(newDate);
-            Buy buy = new Buy(
+            Purchase buy = new Purchase(
                     rs.getInt(1),
                     rs.getInt(2),
                     formatD,

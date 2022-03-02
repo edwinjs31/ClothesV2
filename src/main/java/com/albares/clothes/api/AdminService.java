@@ -1,6 +1,6 @@
 package com.albares.clothes.api;
 
-import com.albares.clothes.db.Buy;
+import com.albares.clothes.db.Purchase;
 import com.albares.clothes.db.Customer;
 import com.albares.clothes.db.Product;
 import com.albares.clothes.utils.*;
@@ -17,7 +17,7 @@ public class AdminService {
     /*
     REQUEST:
     {
-        "product":{...}    //el admin puede dar de alta a cualquiera de los dos
+        "product":{...}    //el admin puede dar de alta a clientes y productos
         "customer":{...}
     }
     RESPONSE:
@@ -29,7 +29,7 @@ public class AdminService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addProduct(GenericData gd) throws SQLException, NoSuchAlgorithmException {
+    public Response addResource(GenericData gd) throws SQLException, NoSuchAlgorithmException {
         Db myDb = new Db();
         myDb.connect();
         if (gd.getProduct() != null) {
@@ -48,54 +48,38 @@ public class AdminService {
 
     }
 
-    
-    
     /*
     REQUEST:
     {
         http://localhost:8084/clothes/admin/products      //lista todos los productos.
         http://localhost:8084/clothes/admin/customers     //lista todos los clientes.
-        http://localhost:8084/clothes/admin/customers?id=2   //id cliente(@QueryParm)lista compras  
     }
     RESPONSE:
     {
         "responseCode": 1 //OK
                         0 //Error
     
-        products:{...}    ||en funcion al REQUEST devolverá una lista u otra(3 posibles listas):
+        products:{...}    ||en funcion al REQUEST devolverá una lista u otra(2 posibles listas):
     
         customers:{...}
-    
-        buys:{"id":4,
-              "product":{"name":"Camiseta,"price":67},
-              "quantity":3,
-              "date":2022-02-28
-              }
     
     }
      */
     @GET
-    @Path("/{entity}")
+    @Path("/{resource}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProducts(@PathParam("entity") String entity, @QueryParam("id") int id) throws SQLException {
+    public Response getProducts(@PathParam("resource") String resource) throws SQLException {
         Response r = new Response();
         Db myDb = new Db();
         myDb.connect();
 
-        if (entity.equalsIgnoreCase("products")) {
+        if (resource.equalsIgnoreCase("products")) {
             List<Product> products = Product.selectAllProducts_DB(myDb);
             myDb.disconnect();
             r.setResponseCode(ResponseCode.OK);
             r.setProducts(products);
             return r;
-        } else if (entity.equalsIgnoreCase("customers")) {
-            if (id != 0) {
-                List<Buy> buys = Buy.selectBuysCustomer_DB(myDb,id);
-                myDb.disconnect();
-                r.setResponseCode(ResponseCode.OK);
-                r.setBuys(buys);
-                return r;
-            }
+        } else if (resource.equalsIgnoreCase("customers")) {
             List<Customer> customers = Customer.selectAllCustomers_DB(myDb);
             myDb.disconnect();
             r.setResponseCode(ResponseCode.OK);
@@ -108,9 +92,45 @@ public class AdminService {
         }
 
     }
-    
-    
 
+    
+      /*
+    REQUEST:
+    {
+      http://localhost:8084/clothes/admin/purchases/customers/5    //Compras del cliente con id 5.
+       
+    }
+    RESPONSE:
+    {
+      purchases:{"id":4,
+                 "product":{"name":"Camiseta,"price":67},
+                 "quantity":3,
+                 "date":2022-02-28
+                }
+    
+    }
+     */
+    @GET
+    @Path("/purchases/customers/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPurchaseByCustomer(@PathParam("id") int id) {
+        Response r = new Response();
+        try {
+            Db myDb = new Db();
+            myDb.connect();
+            List<Purchase> buys = Purchase.selectBuysCustomer_DB(myDb, id);
+            myDb.disconnect();
+            r.setResponseCode(ResponseCode.OK);
+            r.setPurchases(buys);
+            return r;
+        } catch (SQLException e) {
+            r.setResponseCode(ResponseCode.ERROR);
+            return r;
+        }
+    }
+
+    
+    
     /*
     REQUEST:
     {
@@ -134,7 +154,7 @@ public class AdminService {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateProduct(GenericData gd) throws SQLException {
+    public Response updateResource(GenericData gd) throws SQLException {
         Response r = new Response();
         Db myDb = new Db();
         myDb.connect();

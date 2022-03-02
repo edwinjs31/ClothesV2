@@ -14,6 +14,8 @@ public class UserService {
     /*
     REQUEST:
     {
+       http://localhost:8084/clothes/user/buy
+    
       "product":{
                 "id":2,
                 }, 
@@ -22,7 +24,7 @@ public class UserService {
                   "id":3
                   },
     
-       "quantity":5
+       "quantity":2
     }
     RESPONSE:
     {
@@ -32,9 +34,10 @@ public class UserService {
     }
      */
     @POST
+    @Path("/buy")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response buyProductCustomer(Buy buy) throws NoSuchAlgorithmException, SQLException {
+    public Response buyProductCustomer(Purchase buy) throws NoSuchAlgorithmException, SQLException {
         Response r = new Response();
         Db myDb = new Db();
         myDb.connect();
@@ -62,9 +65,9 @@ public class UserService {
             r.setResponseCode(ResponseCode.ERROR);
             return r;
         }
-
     }
 
+    
     
     /*
     REQUEST:
